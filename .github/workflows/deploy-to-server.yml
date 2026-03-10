@@ -29,7 +29,6 @@ jobs:
           DB_HOST: ${{vars.DB_HOST}}
           PORT: ${{vars.PORT}}
           DB_USER: ${{vars.DB_USER}}
-          DOCKER_TAG: ${{ github.run_number }}
       - name: Install cloudflared
         uses: AnimMouse/setup-cloudflared@v2
       - name: Start Tunnel and Capture URL
@@ -51,5 +50,5 @@ jobs:
           # Now this will work because we set it manually in the previous step
           echo "Your app is live at: ${{ steps.cloudflare_tunnel.outputs.url }}"
       - name: Keep the runner active
-        run: sleep 300
+        run: sleep 80
  
