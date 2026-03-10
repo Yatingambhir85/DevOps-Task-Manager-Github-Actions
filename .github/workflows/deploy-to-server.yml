@@ -7,7 +7,7 @@ on:
 jobs:
   deploy:
     runs-on: self-hosted
-    timeout-minutes: 2
+    timeout-minutes: 1
     steps:
       - name: checkout code
         uses: actions/checkout@v4
