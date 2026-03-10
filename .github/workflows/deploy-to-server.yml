@@ -13,7 +13,8 @@ jobs:
       - name: Install Docker Compose
         run: |
           sudo apt update && sudo apt upgrade -y
-          sudo apt-get install docker-compose-v2 -y
+          sudo apt-get install docker-compose-v2 -y && sudo apt-get install docker.io
+          sudo usermod -aG docker $USER && newgrp docker
       - name: Run the container
         run: |
           docker compose down && docker compose up -d --build --force-recreate --pull always
@@ -26,7 +27,6 @@ jobs:
           DB_USER: ${{vars.DB_USER}}
       - name: Keep the runner active
         run: |
-          curl http://localhost:3000
           docker ps
       - name: Setup Cloudflare Tunnel
         uses: AnimMouse/setup-cloudflared@v2
