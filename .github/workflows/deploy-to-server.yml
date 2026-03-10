@@ -56,6 +56,7 @@ jobs:
             PORT: ${{vars.PORT}}
             DB_USER: ${{vars.DB_USER}}
   deploy_on_github-managed:
+      needs: deploy
       runs-on: ubuntu-latest
       steps:
         - name: checkout code
@@ -72,7 +73,7 @@ jobs:
             docker ps
             docker logs task-manager-app
             sleep 20
-            env:
+          env:
               DB_PASSWORD: ${{secrets.DB_PASSWORD}}
               DB_NAME: ${{vars.DB_NAME}}
               DOCKERHUB_USERNAME: ${{vars.DOCKERHUB_USERNAME}}
