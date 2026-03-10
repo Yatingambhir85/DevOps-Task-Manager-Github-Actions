@@ -146,23 +146,17 @@ This project includes **multiple GitHub Actions workflows**, each responsible fo
 
 # 📂 Workflow Files
 
-Dockerfile Lint  
-https://github.com/Yatingambhir85/DevOps-Task-Manager-Github-Actions/blob/main/.github/workflows/Dockerfile-Lint.yml
+- **[Dockerfile Lint](https://github.com/Yatingambhir85/DevOps-Task-Manager-Github-Actions/blob/main/.github/workflows/Dockerfile-Lint.yml)**
 
-Code Dependency Check  
-https://github.com/Yatingambhir85/DevOps-Task-Manager-Github-Actions/blob/main/.github/workflows/code-dependency-check.yml
+- **[Code Dependency Check](https://github.com/Yatingambhir85/DevOps-Task-Manager-Github-Actions/blob/main/.github/workflows/code-dependency-check.yml)**
 
-Docker Build & Push  
-https://github.com/Yatingambhir85/DevOps-Task-Manager-Github-Actions/blob/main/.github/workflows/docker-build-%26-push.yml
+- **[Docker Build & Push](https://github.com/Yatingambhir85/DevOps-Task-Manager-Github-Actions/blob/main/.github/workflows/docker-build-%26-push.yml)**
 
-Image Scan  
-https://github.com/Yatingambhir85/DevOps-Task-Manager-Github-Actions/blob/main/.github/workflows/image-scan.yml
+- **[Image Scan](https://github.com/Yatingambhir85/DevOps-Task-Manager-Github-Actions/blob/main/.github/workflows/image-scan.yml)**
 
-Deployment to Server  
-https://github.com/Yatingambhir85/DevOps-Task-Manager-Github-Actions/blob/main/.github/workflows/deploy-to-server.yml
+- **[Deployment to Server](https://github.com/Yatingambhir85/DevOps-Task-Manager-Github-Actions/blob/main/.github/workflows/deploy-to-server.yml)**
 
-Complete DevSecOps Pipeline  
-https://github.com/Yatingambhir85/DevOps-Task-Manager-Github-Actions/blob/main/.github/workflows/devsecops-complete-pipeline.yml
+- **[Complete DevSecOps Pipeline](https://github.com/Yatingambhir85/DevOps-Task-Manager-Github-Actions/blob/main/.github/workflows/devsecops-complete-pipeline.yml)**
 
 ---
 
