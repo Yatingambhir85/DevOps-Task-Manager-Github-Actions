@@ -51,6 +51,18 @@ Make sure the following tools are installed:
 
 ---
 
+# 🔐 Environment Variables
+
+Before running the application, configure the environment variables.
+
+- For **Docker setup**, refer to **`backend/.env.docker`**
+- For **local setup**, refer to **`backend/.env`**
+
+Sample files are already provided inside the **backend folder**.  
+Please review and update them before running the application.
+
+---
+
 # 🐳 Running the Application with Docker
 
 ### Step 1 — Build the containers
@@ -89,6 +101,12 @@ git clone https://github.com/Yatingambhir85/DevOps-Task-Manager-Github-Actions
 cd DevOps-Task-Manager-Github-Actions/backend
 ```
 
+### Ensure local environment file exists
+
+```
+backend/.env
+```
+
 ### Start the application
 
 ```bash
@@ -105,7 +123,7 @@ http://localhost:3000
 
 # 🔄 GitHub Actions Workflows
 
-This project includes **multiple GitHub Actions workflows** representing different stages of a **DevSecOps pipeline**.
+This project includes **multiple GitHub Actions workflows**, each responsible for a different stage of the **DevSecOps pipeline**.
 
 ### 🧹 Code & Dependency Checks
 - **Dockerfile Lint**
@@ -128,22 +146,22 @@ This project includes **multiple GitHub Actions workflows** representing differe
 
 # 📂 Workflow Files
 
-- Dockerfile Lint  
+Dockerfile Lint  
 https://github.com/Yatingambhir85/DevOps-Task-Manager-Github-Actions/blob/main/.github/workflows/Dockerfile-Lint.yml
 
-- Code Dependency Check  
+Code Dependency Check  
 https://github.com/Yatingambhir85/DevOps-Task-Manager-Github-Actions/blob/main/.github/workflows/code-dependency-check.yml
 
-- Docker Build & Push  
+Docker Build & Push  
 https://github.com/Yatingambhir85/DevOps-Task-Manager-Github-Actions/blob/main/.github/workflows/docker-build-%26-push.yml
 
-- Image Scan  
+Image Scan  
 https://github.com/Yatingambhir85/DevOps-Task-Manager-Github-Actions/blob/main/.github/workflows/image-scan.yml
 
-- Deployment to Server  
+Deployment to Server  
 https://github.com/Yatingambhir85/DevOps-Task-Manager-Github-Actions/blob/main/.github/workflows/deploy-to-server.yml
 
-- Complete DevSecOps Pipeline  
+Complete DevSecOps Pipeline  
 https://github.com/Yatingambhir85/DevOps-Task-Manager-Github-Actions/blob/main/.github/workflows/devsecops-complete-pipeline.yml
 
 ---
@@ -164,16 +182,16 @@ https://github.com/Yatingambhir85/DevOps-Task-Manager-Github-Actions/blob/main/.
 
 The goal of this project is to demonstrate the **complete DevOps lifecycle**, including:
 
-- Continuous Integration
-- Security Integration (DevSecOps)
-- Containerization
-- Continuous Deployment
+- Continuous Integration  
+- Security Integration (DevSecOps)  
+- Containerization  
+- Continuous Deployment  
 
 ---
 
 # 🙌 Acknowledgment
 
-Special thanks to **TrainWithShubham** and **Shubham Londhe** for making **DevOps and GitHub Actions concepts easy to understand**.
+Special thanks to **TrainWithShubham** and **[@Shubham Londhe](https://github.com/LondheShubham153)** for making **DevOps and GitHub Actions concepts easy to understand**.
 
 ---
 
