@@ -17,6 +17,9 @@ jobs:
       - name: Run the container
         run: |
           docker compose down && docker compose up -d --build --force-recreate --pull always
+          # Give the app 10 seconds to actually start the internal server
+          sleep 10
+          docker ps
         env:
           DB_PASSWORD: ${{secrets.DB_PASSWORD}}
           DB_NAME: ${{vars.DB_NAME}}
