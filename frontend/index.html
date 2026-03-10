@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevOps Task Manager</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="batch-tag">DevOps Josh Batch 10</div>
+
+    <div class="glass-container">
+        <header>
+            <div class="status-badge">System Online</div>
+            <h1>🚀 DevOps Tasks</h1>
+            <p id="taskCount">Syncing with database...</p>
+        </header>
+
+        <div class="input-section">
+            <input type="text" id="taskInput" placeholder="New pipeline task..." onkeypress="if(event.key === 'Enter') addTask()">
+            <button onclick="addTask()">Deploy</button>
+        </div>
+
+        <div class="list-wrapper">
+            <ul id="taskList"></ul>
+        </div>
+
+        <footer>
+            Built by <span>Yatin Gambhir</span>
+        </footer>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

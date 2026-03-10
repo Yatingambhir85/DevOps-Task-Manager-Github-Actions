@@ -1,0 +1,4 @@
+backend/.env
+backend/.env.docker
+node_modules/
+
