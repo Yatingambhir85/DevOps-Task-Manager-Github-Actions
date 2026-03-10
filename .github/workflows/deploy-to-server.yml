@@ -24,6 +24,9 @@ jobs:
           DB_HOST: ${{vars.DB_HOST}}
           PORT: ${{vars.PORT}}
           DB_USER: ${{vars.DB_USER}}
+      - name: Ping the website
+        run: |
+          ping http://localhost:3000
       - name: Setup Cloudflare Tunnel
         uses: AnimMouse/setup-cloudflared@v2
 
