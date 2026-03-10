@@ -21,4 +21,4 @@ jobs:
           image-ref: ${{ vars.DOCKERHUB_USERNAME }}/task-manager-application:latest
           severity: 'CRITICAL,HIGH'
           exit-code: '1'
-          trivyignore: ${{ github.workspace }}/.trivyignore
+          trivyignores: ${{ github.workspace }}/.trivyignores
