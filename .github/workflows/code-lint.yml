@@ -1,0 +1,28 @@
+name: Code Linting Workflow
+
+on:
+  push:
+    branches: main
+  workflow_dispatch: 
+
+jobs:
+  lint:
+   runs-on: ubuntu-latest
+   strategy:
+     matrix:
+       node-version: [ "20", "22", "24" ]
+   steps:
+     - name: Checkout code
+       uses: actions/checkout@v4
+     - name: Setup nodejs ${{ matrix.node-version}}
+       uses: actions/setup-node@v6
+       with:
+         node-version: ${{ matrix.node-version }}
+     - name: install dependencies
+       run: npm i
+     - name: Run Linter
+       run: npx eslint "backend/*.js" "frontend/*.js" --fix
+     - name: Run Dependencies Check
+       run: |
+         npm audit
+         npm audit fix
