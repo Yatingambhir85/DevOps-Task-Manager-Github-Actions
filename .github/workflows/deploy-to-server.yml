@@ -56,8 +56,9 @@ jobs:
             PORT: ${{vars.PORT}}
             DB_USER: ${{vars.DB_USER}}
   deploy_on_github-managed:
-      needs: deploy
       runs-on: ubuntu-latest
+      needs: deploy
+      if: always()
       steps:
         - name: checkout code
           uses: actions/checkout@v4
@@ -95,7 +96,7 @@ jobs:
           run: |
             echo "Your app is live at: ${{ steps.cloudflare_tunnel.outputs.url }}"
         - name: Keep the runner active
-          run: sleep 80 # Increase this as per your need
+          run: sleep 120 # Increase this as per your need
 
             
         
