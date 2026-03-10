@@ -23,7 +23,7 @@ services:
 
   # App Service
   app:
-    image: ${DOCKERHUB_USERNAME}/task-manager-application:${DOCKER_TAG}
+    image: ${DOCKERHUB_USERNAME}/task-manager-application:latest
     container_name: task-manager-app
     restart: always
     ports:
