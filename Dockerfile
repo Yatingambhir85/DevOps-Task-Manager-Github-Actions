@@ -6,7 +6,7 @@ COPY package.*json ./
 
 RUN npm i
 
-FROM gcr.io/distroless/nodejs20-debian12:nonroot AS runtime AS runtime
+FROM gcr.io/distroless/nodejs20-debian12:nonroot AS runtime
 
 WORKDIR /app
 
