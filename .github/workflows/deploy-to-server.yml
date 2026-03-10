@@ -28,15 +28,16 @@ jobs:
         run: |
           docker ps
       - name: Setup Cloudflare Tunnel
+        id: cloudflare_tunnel
         uses: AnimMouse/setup-cloudflared@v2
+        with:
+          url: http://localhost:3000
 
-      - name: Start Tunnel
+      - name: Use the Public URL
         run: |
-          # Start the tunnel in the background
-          cloudflared tunnel --url http://localhost:3000 > tunnel.log 2>&1 &
-    
-          # Wait for the URL to appear in the logs (up to 30 seconds)
-          timeout 30s bash -c 'until grep -o "https://.*\.trycloudflare\.com" tunnel.log; do sleep 1; done' > url.txt
+          echo "Your app is live at: ${{ steps.cloudflare_tunnel.outputs.url }}"
+      - name: Keep the runner active
+        run: sleep 1800
     
           # Print the URL so it's visible in the Action logs
           cat url.txt
