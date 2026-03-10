@@ -21,4 +21,5 @@ jobs:
           image-ref: ${{ vars.DOCKERHUB_USERNAME }}/task-manager-application:latest
           severity: 'CRITICAL,HIGH'
           exit-code: '1'
+          ignore-unfixed: true # Only fails if a fix is actually available
           trivyignores: ${{ github.workspace }}/.trivyignore
