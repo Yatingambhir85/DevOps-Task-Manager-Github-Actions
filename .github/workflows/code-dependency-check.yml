@@ -21,13 +21,7 @@ jobs:
      - name: install dependencies
        run: npm i
      - name: Run Linter
-       run: npx eslint "backend/*.js" "frontend/*.js" --format json --output-file eslint-report-node-${{ matrix.node-version }}.json
-       continue-on-error: true
-     - name: Save JSON for later
-       uses: actions/upload-artifact@v4
-       with:
-        name: eslint-report-node-${{matrix.node-version}}
-        path: eslint-report-node-${{matrix.node-version}}.json
+       run: npx eslint "backend/*.js" "frontend/*.js"
      - name: Run Dependencies Check
        run: |
          npm audit
