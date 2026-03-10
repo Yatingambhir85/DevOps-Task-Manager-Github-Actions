@@ -27,7 +27,7 @@ jobs:
        uses: actions/upload-artifact@v4
        with:
         name: eslint-report-node-${{matrix.node-version}}
-        path: eslint-report-${{matrix.node-version}}.json
+        path: eslint-report-node-${{matrix.node-version}}.json
      - name: Run Dependencies Check
        run: |
          npm audit
