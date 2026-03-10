@@ -17,7 +17,7 @@ jobs:
           host: ${{ secrets.EC2_SSH_HOST }}
           username: ${{ secrets.EC2_SSH_USER }}
           key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
-          script: |
+          run: |
                  echo "Installing required packages & folders."
                  sudo apt-get update && sudo apt-get install docker.io 
                  sudo apt-get install docker-compose-v2 -y
@@ -32,18 +32,23 @@ jobs:
           source: docker-compose.yml
           target: ~/devops
 
-      - name: Run the container
-        run: |
-          docker compose down && docker compose up -d --build --force-recreate --pull always
-          # Give the app 10 seconds to actually start the internal server
-          sleep 10
-          docker ps
-          docker logs task-manager-app
-          sleep 20
+      - name: SSH to server and run the app
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_SSH_HOST }}
+          username: ${{ secrets.EC2_SSH_USER }}
+          key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
+          run: |
+            docker compose down && docker compose up -d --build --force-recreate --pull always
+            # Give the app 10 seconds to actually start the internal server
+            sleep 10
+            docker ps
+            docker logs task-manager-app
+            sleep 20
         env:
-          DB_PASSWORD: ${{secrets.DB_PASSWORD}}
-          DB_NAME: ${{vars.DB_NAME}}
-          DOCKERHUB_USERNAME: ${{vars.DOCKERHUB_USERNAME}}
-          DB_HOST: ${{vars.DB_HOST}}
-          PORT: ${{vars.PORT}}
-          DB_USER: ${{vars.DB_USER}}
+            DB_PASSWORD: ${{secrets.DB_PASSWORD}}
+            DB_NAME: ${{vars.DB_NAME}}
+            DOCKERHUB_USERNAME: ${{vars.DOCKERHUB_USERNAME}}
+            DB_HOST: ${{vars.DB_HOST}}
+            PORT: ${{vars.PORT}}
+            DB_USER: ${{vars.DB_USER}}
