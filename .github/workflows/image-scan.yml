@@ -6,7 +6,7 @@ on:
 
 jobs:
   image-scan:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     steps:
       - name: code checkout
         uses: actions/checkout@v4
