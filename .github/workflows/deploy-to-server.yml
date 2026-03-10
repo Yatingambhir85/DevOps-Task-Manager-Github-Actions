@@ -19,7 +19,8 @@ jobs:
           key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
           script: |
                  echo "Installing required packages & folders."
-                 sudo apt-get update && sudo apt-get install docker.io docker-compose-v2 -y
+                 sudo apt-get update && sudo apt-get install docker.io 
+                 sudo apt-get install docker-compose-v2 -y
                  sudo usermod -aG docker $USER
                  mkdir -p devops
                  
