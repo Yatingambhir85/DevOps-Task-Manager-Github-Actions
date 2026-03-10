@@ -50,5 +50,5 @@ jobs:
           # Now this will work because we set it manually in the previous step
           echo "Your app is live at: ${{ steps.cloudflare_tunnel.outputs.url }}"
       - name: Keep the runner active
-        run: sleep 1800
+        run: sleep 300
  
