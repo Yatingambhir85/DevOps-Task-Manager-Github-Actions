@@ -1,0 +1,32 @@
+name: DevSecOps Complete Pipeline
+
+on: 
+  push:
+    branches: main
+
+jobs:
+  # CI (Continous Integration with Security Scanning)
+  code-dependency-check:
+    uses: ./.github/workflows/code-dependency-check.yml
+    
+  dockerfile-lint:
+    needs: [code-dependency-check]
+    uses: ./.github/workflows/Dockerfile-Lint.yml
+  
+  docker_build_push:
+    needs: [code-dependency-check, dockerfile-lint]
+    uses: ./.github/workflows/docker-build-&-push.yml
+    secrets: inherit
+
+  image_scan:
+    needs: [docker_build_push]
+    uses: ./.github/workflows/image-scan.yml
+    secrets: inherit
+# CD (Continous Deployment to Server)
+  deploy:
+    uses: ./.github/workflows/deploy-to-server.yml
+    secrets: inherit
+    needs: image_scan
+  
+  
+  
