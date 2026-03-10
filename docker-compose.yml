@@ -23,8 +23,7 @@ services:
 
   # App Service
   app:
-    build: 
-      context: .
+    image: ${DOCKERHUB_USERNAME}/task-manager-application:latest
     container_name: task-manager-app
     restart: always
     ports:
