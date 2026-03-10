@@ -37,3 +37,5 @@ jobs:
     
           # Print the URL so it's visible in the Action logs
           cat url.txt
+      - name: Keep the runner active
+        run: sleep 1800
