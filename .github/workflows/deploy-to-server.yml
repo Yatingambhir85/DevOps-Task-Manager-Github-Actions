@@ -10,10 +10,33 @@ jobs:
     steps:
       - name: checkout code
         uses: actions/checkout@v4
+        
+      - name: SSH into the cloud server, install the packages and create a directory
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_SSH_HOST }}
+          username: ${{ secrets.EC2_SSH_USER }}
+          key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
+          script: |
+                 echo "Installing required packages & folders."
+                 sudo apt-get update && sudo apt-get install docker.io docker-compose-v2 -y
+                 sudo usermod -aG docker $USER
+                 mkdir -p devops
+                 
       - name: Check version of Docker Compose
         run: |
            docker --version
            docker compose version
+                     
+      - name: Copy the docker-compose file
+        uses: appleboy/scp-action@v1
+        with:
+          host: ${{ secrets.EC2_SSH_HOST }}
+          username: ${{ secrets.EC2_SSH_USER }}
+          key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
+          source: docker-compose.yml
+          target: ~/devops
+
       - name: Run the container
         run: |
           docker compose down && docker compose up -d --build --force-recreate --pull always
@@ -29,26 +52,3 @@ jobs:
           DB_HOST: ${{vars.DB_HOST}}
           PORT: ${{vars.PORT}}
           DB_USER: ${{vars.DB_USER}}
-      - name: Install cloudflared
-        uses: AnimMouse/setup-cloudflared@v2
-      - name: Start Tunnel and Capture URL
-        id: cloudflare_tunnel
-        run: |
-          # 1. Start the tunnel and pipe output to a file
-          cloudflared tunnel --url http://localhost:3000 > tunnel.log 2>&1 &
-          
-          # 2. Wait for the URL to appear in the log (up to 30 seconds)
-          echo "Waiting for Cloudflare URL..."
-          timeout 30s bash -c 'until grep -o "https://.*\.trycloudflare\.com" tunnel.log; do sleep 1; done' > url.txt
-          
-          # 3. Clean up the URL and save it to GitHub Outputs
-          TUNNEL_URL=$(cat url.txt)
-          echo "url=$TUNNEL_URL" >> $GITHUB_OUTPUT
-          echo "Your app is live at: $TUNNEL_URL"
-      - name: Use the Public URL
-        run: |
-          # Now this will work because we set it manually in the previous step
-          echo "Your app is live at: ${{ steps.cloudflare_tunnel.outputs.url }}"
-      - name: Keep the runner active
-        run: sleep 80
- 
