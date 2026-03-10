@@ -8,12 +8,10 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Serve static files (CSS, JS) from the frontend folder
-// Adjust this path if your folder structure is different in Docker
+// Serve static files from the frontend folder
 app.use(express.static(path.join(__dirname, '../frontend')));
 
 // Database Configuration
-// Uses Environment Variables with safe defaults for Docker Compose
 const dbConfig = {
     host: process.env.DB_HOST || 'db',
     user: process.env.DB_USER || 'root',
@@ -22,7 +20,7 @@ const dbConfig = {
 
 const DB_NAME = process.env.DB_NAME || 'task_manager';
 
-// --- DATABASE INITIALIZATION WITH RETRY LOGIC ---
+// --- DATABASE INITIALIZATION WITH RETRY LOOP ---
 async function initDB() {
     let connected = false;
     let retries = 5;
@@ -32,11 +30,9 @@ async function initDB() {
             console.log(`📡 Attempting to connect to DB at ${dbConfig.host}... (${retries} retries left)`);
             const connection = await mysql.createConnection(dbConfig);
             
-            // 1. Create Database
             await connection.query(`CREATE DATABASE IF NOT EXISTS \`${DB_NAME}\`;`);
             await connection.query(`USE \`${DB_NAME}\`;`);
             
-            // 2. Create Table
             await connection.query(`
                 CREATE TABLE IF NOT EXISTS tasks (
                     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -54,9 +50,8 @@ async function initDB() {
             
             if (retries === 0) {
                 console.error("Max retries reached. Database is unreachable.");
-                process.exit(1); // Kill the container so Docker knows it failed
+                process.exit(1); 
             }
-            
             // Wait 5 seconds before trying again
             await new Promise(res => setTimeout(res, 5000));
         }
@@ -65,20 +60,15 @@ async function initDB() {
 
 // --- API ROUTES ---
 
-// API: Get all tasks
 app.get('/api/tasks', async (req, res) => {
     try {
         const conn = await mysql.createConnection({...dbConfig, database: DB_NAME});
         const [rows] = await conn.query('SELECT * FROM tasks ORDER BY id DESC');
         await conn.end();
         res.json(rows);
-    } catch (err) { 
-        console.error("GET Error:", err.message);
-        res.status(500).json({ error: err.message }); 
-    }
+    } catch (err) { res.status(500).json({ error: err.message }); }
 });
 
-// API: Add task
 app.post('/api/tasks', async (req, res) => {
     try {
         const conn = await mysql.createConnection({...dbConfig, database: DB_NAME});
@@ -88,12 +78,10 @@ app.post('/api/tasks', async (req, res) => {
     } catch (err) { res.status(500).json({ error: err.message }); }
 });
 
-// API: Toggle Status
 app.patch('/api/tasks/:id/toggle', async (req, res) => {
     try {
         const conn = await mysql.createConnection({...dbConfig, database: DB_NAME});
         const [rows] = await conn.query('SELECT status FROM tasks WHERE id = ?', [req.params.id]);
-        
         if (rows.length === 0) return res.status(404).json({ error: "Task not found" });
 
         const newStatus = rows[0].status === 'Pending' ? 'Completed' : 'Pending';
@@ -103,7 +91,6 @@ app.patch('/api/tasks/:id/toggle', async (req, res) => {
     } catch (err) { res.status(500).json({ error: err.message }); }
 });
 
-// API: Delete task
 app.delete('/api/tasks/:id', async (req, res) => {
     try {
         const conn = await mysql.createConnection({...dbConfig, database: DB_NAME});
@@ -113,15 +100,15 @@ app.delete('/api/tasks/:id', async (req, res) => {
     } catch (err) { res.status(500).json({ error: err.message }); }
 });
 
-// Fallback: Serve the frontend
-app.get('*', (req, res) => {
+// --- THE FIX: CATCH-ALL ROUTE ---
+// Using '/*' instead of '*' to avoid PathError in newer Express versions
+app.get('/*', (req, res) => {
     res.sendFile(path.join(__dirname, '../frontend/index.html'));
 });
 
 // --- SERVER STARTUP ---
 const PORT = process.env.PORT || 3000;
 
-// Only start Express after the DB is confirmed ready
 initDB().then(() => {
     app.listen(PORT, () => {
         console.log(`🚀 DevOps Server is LIVE: http://localhost:${PORT}`);
