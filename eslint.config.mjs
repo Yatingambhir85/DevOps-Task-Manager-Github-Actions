@@ -4,13 +4,19 @@ export default [
     files: ["backend/**/*.js"],
     languageOptions: {
       ecmaVersion: "latest",
-      sourceType: "commonjs", // Allows 'require' and 'module.exports'
+      sourceType: "commonjs", 
       globals: {
         process: "readonly",
         __dirname: "readonly",
         require: "readonly",
         module: "readonly",
-        console: "readonly"
+        console: "readonly",
+        // --- ADD THESE ---
+        setTimeout: "readonly",
+        clearTimeout: "readonly",
+        setInterval: "readonly",
+        clearInterval: "readonly",
+        Buffer: "readonly"
       }
     },
     rules: {
@@ -26,13 +32,16 @@ export default [
       globals: {
         window: "readonly",
         document: "readonly",
-        fetch: "readonly", // Fixes 'fetch is not defined'
-        console: "readonly"
+        fetch: "readonly",
+        console: "readonly",
+        // Added for frontend timers if needed
+        setTimeout: "readonly",
+        localStorage: "readonly"
       }
     },
     rules: {
       "no-undef": "error",
-      "no-unused-vars": "off", // Hides those 'addTask is defined but never used' warnings
+      "no-unused-vars": "off", 
       "semi": ["error", "always"]
     }
   }
