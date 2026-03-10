@@ -29,6 +29,7 @@ jobs:
           DB_HOST: ${{vars.DB_HOST}}
           PORT: ${{vars.PORT}}
           DB_USER: ${{vars.DB_USER}}
+          DOCKER_TAG: ${{ github.run_id }}
       - name: Install cloudflared
         uses: AnimMouse/setup-cloudflared@v2
       - name: Start Tunnel and Capture URL
