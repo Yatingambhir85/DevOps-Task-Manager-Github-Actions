@@ -10,12 +10,10 @@ jobs:
     steps:
       - name: checkout code
         uses: actions/checkout@v4
-      - name: Install Docker Compose
+      - name: Check version of Docker Compose
         run: |
-          sudo apt update && sudo apt upgrade -y
-          sudo apt-get install docker-compose-v2 -y
-          sudo apt-get install docker.io -y
-          sudo usermod -aG docker $USER && newgrp docker
+           docker --version
+           docker compose version
       - name: Run the container
         run: |
           docker compose down && docker compose up -d --build --force-recreate --pull always
