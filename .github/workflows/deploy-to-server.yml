@@ -1,0 +1,28 @@
+name: Deployment to server
+
+on: 
+  workflow_dispatch:
+  workflow_call:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout code
+        uses: actions/checkout@v4
+      - name: Install Docker Compose
+        run: |
+          sudo apt update && sudo apt upgrade -y
+          sudo apt-get install docker-compose-v2 -y
+      - name: Run the container
+        run: |
+          docker compose down && docker compose up -d --build --force-recreate --pull always
+      - name: Setup Cloudflare Tunnel
+        uses: AnimMouse/setup-cloudflared@v2
+
+      - name: Start Tunnel
+        run: |
+          # Expose port 8080 (replace with your app's port)
+          cloudflared tunnel --url http://localhost:3000 > tunnel.log 2>&1 &
+          sleep 5
+          grep -o 'https://.*\.trycloudflare\.com' tunnel.log
