@@ -34,7 +34,4 @@ jobs:
           echo "Your app is live at: ${{ steps.cloudflare_tunnel.outputs.url }}"
       - name: Keep the runner active
         run: sleep 1800
-    
-          # Print the URL so it's visible in the Action logs
-          cat url.txt
  
