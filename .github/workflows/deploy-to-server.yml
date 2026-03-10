@@ -24,9 +24,11 @@ jobs:
           DB_HOST: ${{vars.DB_HOST}}
           PORT: ${{vars.PORT}}
           DB_USER: ${{vars.DB_USER}}
-      - name: Ping the website
+      - name: Keep the runner active
         run: |
-          ping -c 5 http://localhost:3000
+          sleep 1800
+          curl http://localhost:3000
+          docker ps
       - name: Setup Cloudflare Tunnel
         uses: AnimMouse/setup-cloudflared@v2
 
@@ -40,5 +42,4 @@ jobs:
     
           # Print the URL so it's visible in the Action logs
           cat url.txt
-      - name: Keep the runner active
-        run: sleep 1800
+ 
