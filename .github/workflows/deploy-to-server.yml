@@ -17,6 +17,13 @@ jobs:
       - name: Run the container
         run: |
           docker compose down && docker compose up -d --build --force-recreate --pull always
+        env:
+          DB_PASSWORD: ${{secrets.DB_PASSWORD}}
+          DB_NAME: ${{vars.DB_NAME}}
+          DOCKERHUB_USERNAME: ${{vars.DOCKERHUB_USERNAME}}
+          DB_HOST: ${{vars.DB_HOST}}
+          PORT: ${{vars.PORT}}
+          DB_USER: ${{vars.DB_USER}}
       - name: Setup Cloudflare Tunnel
         uses: AnimMouse/setup-cloudflared@v2
 
