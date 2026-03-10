@@ -30,7 +30,7 @@ jobs:
         id: cloudflare_tunnel
         uses: AnimMouse/setup-cloudflared/tunnel@v2
         with:
-          port: 3000
+          url: http://localhost:3000
       - name: Use the Public URL
         run: |
           echo "Your app is live at: ${{ steps.cloudflare_tunnel.outputs.url }}"
