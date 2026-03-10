@@ -1,20 +1,24 @@
-import js from "@eslint/js";
-import globals from "globals";
-
+// eslint.config.mjs
 export default [
-    js.configs.recommended,
     {
+        // This replaces "js.configs.recommended" manually for basic syntax
+        rules: {
+            "no-unused-vars": "warn",
+            "no-undef": "error",
+            "semi": ["error", "always"],
+            "quotes": ["error", "single"]
+        },
         languageOptions: {
             ecmaVersion: "latest",
             sourceType: "module",
             globals: {
-                ...globals.node,
-                ...globals.browser
+                // Manually defining common globals so we don't need the 'globals' package
+                process: "readonly",
+                __dirname: "readonly",
+                window: "readonly",
+                document: "readonly",
+                console: "readonly"
             }
-        },
-        rules: {
-            "semi": ["error", "always"],
-            "quotes": ["error", "single"]
         }
     }
 ];
