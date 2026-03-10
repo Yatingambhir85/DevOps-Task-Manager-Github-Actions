@@ -39,6 +39,7 @@ jobs:
           username: ${{ secrets.EC2_SSH_USER }}
           key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
           script: |
+            cd devops/
             docker compose down && docker compose up -d --build --force-recreate --pull always
             # Give the app 10 seconds to actually start the internal server
             sleep 10
