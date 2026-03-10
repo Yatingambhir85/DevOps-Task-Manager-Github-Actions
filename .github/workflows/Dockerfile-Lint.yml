@@ -1,0 +1,17 @@
+name: Dockerfile Lint
+
+on: 
+  workflow_dispatch:
+  workflow_call: 
+
+jobs:
+  dockerfile-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Dockerfile lint
+        uses: hadolint/hadolint-action@v3.1.0
+        with:
+          dockerfile: Dockerfile
+  
