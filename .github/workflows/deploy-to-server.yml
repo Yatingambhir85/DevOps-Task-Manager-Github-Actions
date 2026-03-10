@@ -41,8 +41,8 @@ jobs:
           envs: DB_PASSWORD, DB_NAME, DOCKERHUB_USERNAME, DB_HOST, PORT, DB_USER
           script: |
             cd devops/
-            sudo docker compose down || true
-            sudo docker compose up -d --build --force-recreate --pull always
+            sudo -E docker compose down || true
+            sudo -E docker compose up -d --build --force-recreate --pull always
             # Give the app 10 seconds to actually start the internal server
             sleep 10
             sudo docker ps
