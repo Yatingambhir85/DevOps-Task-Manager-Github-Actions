@@ -55,3 +55,46 @@ jobs:
             DB_HOST: ${{vars.DB_HOST}}
             PORT: ${{vars.PORT}}
             DB_USER: ${{vars.DB_USER}}
+  deploy_on_github-managed:
+      runs-on: ubuntu-latest
+      steps:
+        - name: checkout code
+          uses: actions/checkout@v4
+        - name: check version of docker and docker compose
+          run: |
+            docker --version
+            docker compose version
+        - name: Run the container
+          run: |
+            docker compose down && docker compose up -d --build --force-recreate --pull always
+            # Give the app 10 seconds to actually start the internal server
+            sleep 10
+            docker ps
+            docker logs task-manager-app
+            sleep 20
+            env:
+              DB_PASSWORD: ${{secrets.DB_PASSWORD}}
+              DB_NAME: ${{vars.DB_NAME}}
+              DOCKERHUB_USERNAME: ${{vars.DOCKERHUB_USERNAME}}
+              DB_HOST: ${{vars.DB_HOST}}
+              PORT: ${{vars.PORT}}
+              DB_USER: ${{vars.DB_USER}}
+        - name: Install cloudeflared
+          uses: AnimMouse/setup-cloudflared@v2
+        - name: Start Tunnel & Capture URL
+          id: cloudflare_tunnel
+          run: |
+            cloudflared tunnel --url http://localhost:3000 > tunnel.log 2>&1 &
+            echo "Waiting for Cloudflare URL..."
+            timeout 30s bash -c 'until grep -o "https://.*\.trycloudflare\.com" tunnel.log; do sleep 1; done' > url.txt
+            TUNNEL_URL=$(cat url.txt)
+            echo "url=$TUNNEL_URL" >> $GITHUB_OUTPUT
+            echo "Your app is live at: $TUNNEL_URL"
+        - name: Use the Public URL for testing
+          run: |
+            echo "Your app is live at: ${{ steps.cloudflare_tunnel.outputs.url }}"
+        - name: Keep the runner active
+          run: sleep 80 # Increase this as per your need
+
+            
+        
