@@ -28,7 +28,7 @@ jobs:
         uses: AnimMouse/setup-cloudflared@v2
       - name: Setup Cloudflare Tunnel
         id: cloudflare_tunnel
-        uses: AnimMouse/setup-cloudflared@v2
+        uses: AnimMouse/setup-cloudflared/tunnel@v2
         with:
           port: 3000
       - name: Use the Public URL
