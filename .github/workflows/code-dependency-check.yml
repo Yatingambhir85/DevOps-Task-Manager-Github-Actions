@@ -21,7 +21,7 @@ jobs:
      - name: install dependencies
        run: npm i
      - name: Run Linter
-       run: npx eslint "backend/*.js" "frontend/*.js" --fix
+       run: npx eslint "backend/*.js" "frontend/*.js"
      - name: Run Dependencies Check
        run: |
          npm audit
