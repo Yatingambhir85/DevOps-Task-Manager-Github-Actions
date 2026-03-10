@@ -29,7 +29,11 @@ jobs:
 
       - name: Start Tunnel
         run: |
-          # Expose port 8080 (replace with your app's port)
+          # Start the tunnel in the background
           cloudflared tunnel --url http://localhost:3000 > tunnel.log 2>&1 &
-          sleep 5
-          grep -o 'https://.*\.trycloudflare\.com' tunnel.log
+    
+          # Wait for the URL to appear in the logs (up to 30 seconds)
+          timeout 30s bash -c 'until grep -o "https://.*\.trycloudflare\.com" tunnel.log; do sleep 1; done' > url.txt
+    
+          # Print the URL so it's visible in the Action logs
+          cat url.txt
