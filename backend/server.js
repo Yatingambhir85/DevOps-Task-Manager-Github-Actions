@@ -100,11 +100,11 @@ app.delete('/api/tasks/:id', async (req, res) => {
     } catch (err) { res.status(500).json({ error: err.message }); }
 });
 
-// --- THE FIX: CATCH-ALL ROUTE ---
-// Using '/*' instead of '*' to avoid PathError in newer Express versions
-app.get('/*', (req, res) => {
+// Fallback: Serve the frontend
+app.use((req, res) => {
     res.sendFile(path.join(__dirname, '../frontend/index.html'));
 });
+
 
 // --- SERVER STARTUP ---
 const PORT = process.env.PORT || 3000;
