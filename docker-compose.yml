@@ -5,15 +5,15 @@ services:
     container_name: task-manager-db
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
-      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_ROOT_PASSWORD: $${{secrets.DB_PASSWORD}}
+      MYSQL_DATABASE: $${{vars.DB_NAME}}
     ports:
       - "3307:3306"
     volumes:
       - db_data:/var/lib/mysql
     # --- HEALTHCHECK SECTION ---
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${DB_PASSWORD}"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${{secrets.DB_PASSWORD}}"]
       interval: 10s     # How often to check
       timeout: 5s      # How long to wait for a response
       retries: 5       # How many times to try before marking as unhealthy
@@ -23,17 +23,17 @@ services:
 
   # App Service
   app:
-    image: ${DOCKERHUB_USERNAME}/task-manager-application:latest
+    image: ${{vars.DOCKERHUB_USERNAME}}/task-manager-application:latest
     container_name: task-manager-app
     restart: always
     ports:
       - "3000:3000"
     environment:
-      - DB_HOST=${DB_HOST}
-      - DB_USER=${DB_USER}
-      - DB_PASSWORD=${DB_PASSWORD}
-      - DB_NAME=${DB_NAME}
-      - PORT=${PORT}
+      - DB_HOST=${{vars.DB_HOST}}
+      - DB_USER=${{vars.DB_USER}}
+      - DB_PASSWORD=${{secrets.DB_PASSWORD}}
+      - DB_NAME=${{vars.DB_NAME}}
+      - PORT=${{vars.PORT}}
     # --- CONDITIONALLY START ---
     depends_on:
       db:
