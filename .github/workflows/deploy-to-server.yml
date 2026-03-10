@@ -26,7 +26,6 @@ jobs:
           DB_USER: ${{vars.DB_USER}}
       - name: Keep the runner active
         run: |
-          sleep 1800
           curl http://localhost:3000
           docker ps
       - name: Setup Cloudflare Tunnel
