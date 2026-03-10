@@ -20,8 +20,6 @@ services:
       start_period: 30s # Give MySQL time to initialize the data directory
     networks:
       - tasks-network
-    env_file:
-      - ./backend/.env.docker
 
   # App Service
   app:
@@ -43,8 +41,6 @@ services:
         condition: service_healthy
     networks:
       - tasks-network
-    env_file:
-      - ./backend/.env.docker
 
 volumes:
   db_data:
