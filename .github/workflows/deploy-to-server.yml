@@ -24,11 +24,13 @@ jobs:
           DB_HOST: ${{vars.DB_HOST}}
           PORT: ${{vars.PORT}}
           DB_USER: ${{vars.DB_USER}}
+      - name: Install cloudflared
+        uses: AnimMouse/setup-cloudflared@v2
       - name: Setup Cloudflare Tunnel
         id: cloudflare_tunnel
         uses: AnimMouse/setup-cloudflared@v2
         with:
-          url: http://localhost:3000
+          port: 3000
       - name: Use the Public URL
         run: |
           echo "Your app is live at: ${{ steps.cloudflare_tunnel.outputs.url }}"
