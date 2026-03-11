@@ -18,9 +18,17 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.MY_GITHUB_PAT }}
         run: |
-          # Replace 'self-hosted' with your specific runner label
-          STATUS=$(gh api repos/${{ github.repository }}/actions/runners | jq -r '.runners[] | select(.labels[].name=="self-hosted") | .status')
-          if [ "$STATUS" == "online" ]; then
+          # Fetch the full JSON response first
+          RESPONSE=$(gh api repos/${{ github.repository }}/actions/runners)
+          # Extract the status and print it to the console
+          # We use head -n 1 in case you have multiple runners with the same label
+          RAW_STATUS=$(echo "$RESPONSE" | jq -r '.runners[]? | select(.labels[].name=="self-hosted") | .status' | head -n 1)
+          # If STATUS is empty, default it to offline
+          FINAL_STATUS=${RAW_STATUS:-not_found}
+          echo "----------------------------------------"
+          echo "🔍 Runner Detection: $FINAL_STATUS"
+          echo "----------------------------------------"
+          if [ "$FINAL_STATUS" == "online" ]; then
             echo "status=online" >> $GITHUB_OUTPUT
           else
             echo "status=offline" >> $GITHUB_OUTPUT
