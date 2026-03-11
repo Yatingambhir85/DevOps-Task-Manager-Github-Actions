@@ -19,9 +19,9 @@ jobs:
     uses: ./.github/workflows/docker-build-&-push.yml
     secrets: inherit
 
-  image_scan:
+  trivy-image_scan:
     needs: [docker_build_push]
-    uses: ./.github/workflows/image-scan.yml
+    uses: ./.github/workflows/trivy-image-scan.yml
     secrets: inherit
 # CD (Continous Deployment to Server)
   deploy:
@@ -30,7 +30,7 @@ jobs:
     permissions:
       contents: read
       actions: read  # This "unlocks" the door for the sub-workflow
-    needs: image_scan
+    needs: trivy-image_scan
   
   
   
