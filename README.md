@@ -48,6 +48,8 @@ Make sure the following tools are installed:
 - **Git**
 - **Docker**
 - **Docker Compose**
+- **AWS EC2 Server is Launched (if using self-hosted runner)**
+- **Required Secrets & Variables are configured in the Github Actions environment**
 
 ---
 
