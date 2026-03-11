@@ -112,10 +112,10 @@ jobs:
           run: |
             docker compose down && docker compose up -d --build --force-recreate --pull always
             # Give the app 10 seconds to actually start the internal server
+            echo "Waiting for health checks..."
             sleep 10
             docker ps
-            docker logs task-manager-app
-            sleep 20
+            docker logs task-manager-app --tail 20
           env:
               DB_PASSWORD: ${{secrets.DB_PASSWORD}}
               DB_NAME: ${{vars.DB_NAME}}
