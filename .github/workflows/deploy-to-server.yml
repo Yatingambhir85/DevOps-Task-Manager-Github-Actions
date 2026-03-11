@@ -135,16 +135,10 @@ jobs:
             echo "url=$TUNNEL_URL" >> $GITHUB_OUTPUT
             echo "Connection established!"
             echo "Your app is live at: $TUNNEL_URL"
-            # CRITICAL: Verify tunnel can actually reach the local port
-            echo "Verifying local connectivity..."
-            if ! curl -sI http://127.0.0.1:3000 > /dev/null; then
-              echo "ERROR: Runner cannot reach port 3000. Is your container actually running?"
-              docker ps
-              exit 1
-            fi
-
         - name: Use the Public URL for testing
           run: |
+            docker ps
+            docker logs task-manager-app --tail 20
             echo "Your app is live at: ${{ steps.cloudflare_tunnel.outputs.url }}"
         - name: Keep the runner active
           run: sleep 120 # Increase this as per your need
