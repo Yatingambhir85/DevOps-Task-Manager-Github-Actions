@@ -152,7 +152,7 @@ This project includes **multiple GitHub Actions workflows**, each responsible fo
 
 - **[Docker Build & Push](https://github.com/Yatingambhir85/DevOps-Task-Manager-Github-Actions/blob/main/.github/workflows/docker-build-%26-push.yml)**
 
-- **[Image Scan](https://github.com/Yatingambhir85/DevOps-Task-Manager-Github-Actions/blob/main/.github/workflows/image-scan.yml)**
+- **[Trivy Image Scan](https://github.com/Yatingambhir85/DevOps-Task-Manager-Github-Actions/blob/main/.github/workflows/trivy-image-scan.yml)**
 
 - **[Deployment to Server](https://github.com/Yatingambhir85/DevOps-Task-Manager-Github-Actions/blob/main/.github/workflows/deploy-to-server.yml)**
 
