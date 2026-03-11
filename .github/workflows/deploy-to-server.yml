@@ -130,7 +130,7 @@ jobs:
           run: |
             cloudflared tunnel --url http://localhost:3000 > tunnel.log 2>&1 &
             echo "Waiting for Cloudflare URL..."
-            timeout 60s bash -c 'until grep -o "https://[^ ]*\.trycloudflare\.com" tunnel.log; do sleep 2; done' > url.txt
+            timeout 120s bash -c 'until grep -o "https://[^ ]*\.trycloudflare\.com" tunnel.log; do sleep 2; done' > url.txt
             TUNNEL_URL=$(cat url.txt)
             echo "url=$TUNNEL_URL" >> $GITHUB_OUTPUT
             echo "Your app is live at: $TUNNEL_URL"
