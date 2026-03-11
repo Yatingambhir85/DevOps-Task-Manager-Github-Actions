@@ -179,7 +179,9 @@ The goal of this project is to demonstrate the **complete DevOps lifecycle**, in
 - Continuous Integration  
 - Security Integration (DevSecOps)  
 - Containerization  
-- Continuous Deployment  
+- Continuous Deployment
+
+🚧 **Upcoming Feature:** Login and Registration functionality will be added in future releases (currently Work In Progress).
 
 ---
 
