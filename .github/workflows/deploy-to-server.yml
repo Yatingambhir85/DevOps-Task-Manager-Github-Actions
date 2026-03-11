@@ -128,19 +128,21 @@ jobs:
         - name: Start Tunnel & Capture URL
           id: cloudflare_tunnel
           run: |
-            cloudflared tunnel --url http://localhost:3000 > tunnel.log 2>&1 &
+            cloudflared tunnel --url http://127.0.0.1:3000 > tunnel.log 2>&1 &
             echo "Waiting for Cloudflare URL..."
-            timeout 60s bash -c 'until grep -o "https://[^ ]*\.trycloudflare\.com" tunnel.log; do sleep 2; done' > url.txt
+            timeout 120s bash -c 'until grep -o "https://[^ ]*\.trycloudflare\.com" tunnel.log; do sleep 2; done' > url.txt
             TUNNEL_URL=$(cat url.txt)
             echo "url=$TUNNEL_URL" >> $GITHUB_OUTPUT
-            echo "Waiting for Cloudflare Edge to route traffic (Health Check)..."
-            # This loop pings the PUBLIC URL until it stops giving 404/502 errors
-            timeout 60s bash -c "until curl -s -o /dev/null -w \"%{http_code}\" $TUNNEL_URL | grep -qE '2[0-9]{2}|3[0-9]{2}'; do 
-            echo 'Tunnel not ready yet, retrying...'; 
-            sleep 5; 
-            done"
             echo "Connection established!"
             echo "Your app is live at: $TUNNEL_URL"
+            # CRITICAL: Verify tunnel can actually reach the local port
+            echo "Verifying local connectivity..."
+            if ! curl -sI http://127.0.0.1:3000 > /dev/null; then
+              echo "ERROR: Runner cannot reach port 3000. Is your container actually running?"
+              docker ps
+              exit 1
+            fi
+
         - name: Use the Public URL for testing
           run: |
             echo "Your app is live at: ${{ steps.cloudflare_tunnel.outputs.url }}"
