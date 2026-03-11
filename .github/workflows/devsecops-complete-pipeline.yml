@@ -27,6 +27,9 @@ jobs:
   deploy:
     uses: ./.github/workflows/deploy-to-server.yml
     secrets: inherit
+    permissions:
+      contents: read
+      actions: read  # This "unlocks" the door for the sub-workflow
     needs: image_scan
   
   
