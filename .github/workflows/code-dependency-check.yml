@@ -3,24 +3,46 @@ name: Code Linting Workflow
 on:
   workflow_call: 
 
+permissions: 
+  contents: write
+
 jobs:
   lint:
-   runs-on: ubuntu-latest
-   strategy:
-     matrix:
-       node-version: [ "20", "22", "24" ]
-   steps:
-     - name: Checkout code
-       uses: actions/checkout@v4
-     - name: Setup nodejs ${{ matrix.node-version}}
-       uses: actions/setup-node@v6
-       with:
-         node-version: ${{ matrix.node-version }}
-     - name: install dependencies
-       run: npm i
-     - name: Run Linter
-       run: npx eslint "backend/*.js" "frontend/*.js"
-     - name: Run Dependencies Check
-       run: |
-         npm audit
-         npm audit fix
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [ "20", "22", "24" ]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          # This ensures we have the full history to push back
+          fetch-depth: 0 
+      - name: Setup nodejs ${{ matrix.node-version }}
+        uses: actions/setup-node@v4 # Note: setup-node@v4 is the current stable version
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm' # Good practice to speed up runs
+      - name: install dependencies
+        run: npm ci # 'npm ci' is faster and more reliable in CI than 'npm i'
+
+      - name: Run Linter
+        run: npx eslint "backend/*.js" "frontend/*.js"
+      # We only run the Audit Fix on ONE version in the matrix to avoid conflicts
+      - name: Run Dependencies Check & Fix
+        if: matrix.node-version == '22' 
+        run: |
+          npm audit fix --package-lock-only
+
+      - name: Commit and Push changes
+        if: matrix.node-version == '22'
+        run: |
+          if [[ -n $(git status --porcelain package-lock.json) ]]; then
+            git config --global user.name "github-actions[bot]"
+            git config --global user.email "github-actions[bot]@users.noreply.github.com"
+            git add package-lock.json
+            git commit -m "chore: automated security fix (npm audit)"
+            git push
+          else
+            echo "No vulnerabilities found that could be automatically fixed."
+          fi
