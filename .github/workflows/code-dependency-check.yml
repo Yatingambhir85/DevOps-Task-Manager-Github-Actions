@@ -3,9 +3,6 @@ name: Code Linting Workflow
 on:
   workflow_call: 
 
-permissions: 
-  contents: write
-
 jobs:
   lint:
     runs-on: ubuntu-latest
@@ -29,20 +26,6 @@ jobs:
       - name: Run Linter
         run: npx eslint "backend/*.js" "frontend/*.js"
       # We only run the Audit Fix on ONE version in the matrix to avoid conflicts
-      - name: Run Dependencies Check & Fix
-        if: matrix.node-version == '22' 
+      - name: Run Dependencies Check & Fix 
         run: |
-          npm audit fix --package-lock-only
-
-      - name: Commit and Push changes
-        if: matrix.node-version == '22'
-        run: |
-          if [[ -n $(git status --porcelain package-lock.json) ]]; then
-            git config --global user.name "github-actions[bot]"
-            git config --global user.email "github-actions[bot]@users.noreply.github.com"
-            git add package-lock.json
-            git commit -m "chore: automated security fix (npm audit)"
-            git push
-          else
-            echo "No vulnerabilities found that could be automatically fixed."
-          fi
+          npm audit fix
