@@ -19,6 +19,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: .
+          pull: true
           push: true
           tags: |
             ${{ vars.DOCKERHUB_USERNAME }}/task-manager-application:latest

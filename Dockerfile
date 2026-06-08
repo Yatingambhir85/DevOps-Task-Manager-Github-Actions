@@ -1,12 +1,12 @@
-FROM node:18-alpine AS build
+FROM node:20-alpine AS build
 
 WORKDIR /app
 
-COPY package.*json ./
+COPY package*.json ./
 
-RUN npm i
+RUN npm ci --omit=dev
 
-FROM gcr.io/distroless/nodejs20-debian12:nonroot AS runtime
+FROM gcr.io/distroless/nodejs20-debian13:nonroot AS runtime
 
 WORKDIR /app
 
