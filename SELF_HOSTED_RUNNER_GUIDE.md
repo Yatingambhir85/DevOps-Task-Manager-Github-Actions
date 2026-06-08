@@ -11,6 +11,54 @@ This project supports both runner types for deployment:
 
 The workflow first checks whether a repository self-hosted runner is online. If it is online, the deployment runs on the self-hosted runner. If it is offline or not configured, the workflow continues with the GitHub-managed fallback job.
 
+## Self-Hosted Runner Prerequisites
+
+Before running this workflow on a self-hosted runner, install Docker on the self-hosted runner machine.
+
+This is required because the deployment workflow uses Appleboy SSH/SCP actions, and those actions run as Docker-based actions on the self-hosted runner.
+
+Minimum runner requirements:
+
+- Linux server, for example Ubuntu EC2
+- GitHub self-hosted runner configured and online
+- Docker installed and running
+- Runner user can run Docker commands
+
+Install Docker and allow the runner user to access it:
+
+```bash
+sudo apt-get update
+sudo apt-get install -y docker.io
+sudo usermod -aG docker $USER
+```
+
+Restart the runner service after adding the user to the Docker group:
+
+```bash
+sudo ./svc.sh stop
+sudo ./svc.sh start
+sudo ./svc.sh status
+```
+
+If Docker permission still fails, reboot once:
+
+```bash
+sudo reboot
+```
+
+After logging back in, verify Docker works without `sudo`:
+
+```bash
+groups
+docker ps
+```
+
+To check live self-hosted runner logs:
+
+```bash
+sudo journalctl -u actions.runner.* -f
+```
+
 ## What You Need
 
 Add these in:
@@ -77,7 +125,21 @@ runs-on: self-hosted
 
 ### 3. Start the Runner
 
-After configuration, start the runner using the service commands shown by GitHub.
+After configuration, run the runner as a background service:
+
+```bash
+sudo ./svc.sh install
+sudo ./svc.sh start
+sudo ./svc.sh status
+```
+
+Useful commands:
+
+```bash
+sudo ./svc.sh stop
+sudo ./svc.sh restart
+sudo ./svc.sh status
+```
 
 Then confirm it is available:
 
@@ -86,6 +148,17 @@ Repository -> Settings -> Actions -> Runners
 ```
 
 The runner should show `Online` or `Idle`.
+
+## If You Previously Used `./run.sh`
+
+If you started the runner manually with `./run.sh` and see `A session for this runner already exists`, stop the old process:
+
+```bash
+ps aux | grep -i runner
+sudo pkill -f Runner.Listener
+```
+
+Then start the runner using the service commands from step 3.
 
 ## Run the Workflow
 
